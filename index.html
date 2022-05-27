@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <meta name="viewport" />
+  <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image.prod.js"></script>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.1.4/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<script>
+
+  AFRAME.registerComponent('vidhandler', {
+    init: function () {
+      this.toggle = false;
+      document.querySelector("#video").pause(); //reference to the video
+    },
+    tick: function () {
+      if (document.querySelector("#targetx").object3D.visible == true) {
+        if (!this.toggle) {
+          this.toggle = true;
+          document.querySelector("#video").play();
+        }
+      } else {
+        this.toggle = false;
+        document.querySelector("#video").pause();
+      }
+    }
+  });
+</script>
+
+<body>
+
+  <a-scene
+    mindar-image="imageTargetSrc: https://querocar.s3.sa-east-1.amazonaws.com/didi.mind; filterMinCF:0.1; filterBeta: 10"
+    color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+    <a-assets>
+
+      <video id="video" loop="true" src="https://querocar.s3.sa-east-1.amazonaws.com/Video.mp4"></video>
+    </a-assets>
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+    <a-entity id="targetx" mindar-image-target="targetIndex: 0">
+
+      <a-video vidhandler src="#video" width="1" height="0.5" position="0 0 0"></a-video>
+
+    </a-entity>
+  </a-scene>
+</body>
+
+</html>
